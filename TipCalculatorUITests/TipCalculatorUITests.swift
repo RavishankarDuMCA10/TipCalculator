@@ -10,11 +10,11 @@ import XCTest
 final class when_content_view_is_shown: XCTestCase {
     
     private var app: XCUIApplication!
-
+    private var contentViewPage: ContentViewPage!
     
     override func setUp() {
         app = XCUIApplication()
-
+        contentViewPage = ContentViewPage(app: app)
         continueAfterFailure = false
         app.launch()
     }
