@@ -20,16 +20,13 @@ final class when_content_view_is_shown: XCTestCase {
     }
 
     func test_should_make_sure_that_the_total_text_field_contains_default_value() {
-        
-        let totalTextField = app.textFields["totalTextField"]
-        
-        XCTAssertEqual(totalTextField.value as! String, "Enter total")
+                
+        XCTAssertEqual(contentViewPage.totalTextField.value as! String, "Enter total")
     }
         
     func test_should_make_sure_the_20_percent_tip_option_is_selected() {
         
-        let tipPercentageSegmentedControl = app.segmentedControls["tipPercentageSegmentedControl"]
-        let segmentedControlButton = tipPercentageSegmentedControl.buttons.element(boundBy: 1)
+        let segmentedControlButton = contentViewPage.tipPercentageSegmentedControl.buttons.element(boundBy: 1)
         
         XCTAssertEqual(segmentedControlButton.label, "20%")
         XCTAssertTrue(segmentedControlButton.isSelected)
@@ -43,23 +40,25 @@ final class when_content_view_is_shown: XCTestCase {
 class when_calculate_tip_buuton_is_pressed_for_invalid_input: XCTestCase {
     
     private var app: XCUIApplication!
+    private var contentViewPage: ContentViewPage!
     
     override func setUp() {
         app = XCUIApplication()
+        contentViewPage = ContentViewPage(app: app)
         continueAfterFailure = false
         app.launch()
         
-        let totalTextField = app.textFields["totalTextField"]
+        let totalTextField = contentViewPage.totalTextField
         totalTextField.tap()
         totalTextField.typeText("-100")
         
-        let calculateTipButton = app.buttons["calculateTipButton"]
+        let calculateTipButton = contentViewPage.calculateTipButton
         calculateTipButton.tap()
     }
     
     func test_should_clear_tip_label_for_invalid_input() {
         
-        let tipText = app.staticTexts["tipText"]
+        let tipText = contentViewPage.tipText
         let _ = tipText.waitForExistence(timeout: 0.5)
         
         XCTAssertEqual(tipText.label, "")
@@ -67,7 +66,7 @@ class when_calculate_tip_buuton_is_pressed_for_invalid_input: XCTestCase {
     
     func test_should_display_error_message_for_invalid_input() {
         
-        let messageText = app.staticTexts["messageText"]
+        let messageText = contentViewPage.messageText
         let _ = messageText.waitForExistence(timeout: 0.5)
         
         XCTAssertEqual(messageText.label, "Invalid Input")
@@ -79,13 +78,15 @@ class when_calculate_tip_buuton_is_pressed_for_invalid_input: XCTestCase {
 class when_calculate_tip_buuton_is_pressed_for_valid_input: XCTestCase {
     
     private var app: XCUIApplication!
+    private var contentViewPage: ContentViewPage!
     
     override func setUp() {
         app = XCUIApplication()
+        contentViewPage = ContentViewPage(app: app)
         continueAfterFailure = false
         app.launch()
         
-        let totalTextField = app.textFields["totalTextField"]
+        let totalTextField = contentViewPage.totalTextField
         totalTextField.tap()
         totalTextField.typeText("100")
         
@@ -99,7 +100,7 @@ class when_calculate_tip_buuton_is_pressed_for_valid_input: XCTestCase {
         formatter.numberStyle = .currency
         let tip = formatter.string(from: NSNumber(value: 20.00))
         
-        let tipText = app.staticTexts["tipText"]
+        let tipText = contentViewPage.tipText
         let _ = tipText.waitForExistence(timeout: 0.5)
         
         XCTAssertEqual(tipText.label, tip)
